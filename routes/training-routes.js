@@ -2,7 +2,7 @@ const router = require('express').Router();
 const Training = require('../models/Training');
 
 
-
+// @route   GET /api/v1/training
 router.get('/', async(req, res, next) => {
     try {
         const trainings= await Training.find({});
@@ -18,15 +18,15 @@ router.get('/', async(req, res, next) => {
 
 router.post('/', async(req,res,next) => {
     const {name, image, date, category} = req.body
-    const dateParsed = parseInt(date)
+    
     
     try {
-        const newtraining= {name, image, dateParsed, category}
+        const newtraining= {name, image, date, category}
         const training= await Training.create(newtraining)
         if (!training) {
             next(new ErrorResponse('An error ocurred while creating training', 500));
           }
-          res.status(201).json({ data: training})
+          res.status(201).json({data: training})
 
     } catch (error) {
         console.error(error)

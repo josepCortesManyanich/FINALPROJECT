@@ -1,8 +1,13 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-// Import the model
+const Training = require('../models/Training')
 
-// Place the array you want to seed
+const trainings = [
+  {},
+  {},
+  {},
+  {}
+]
 
 mongoose.connect(process.env.MONGO_URL)
   .then(x => console.log(`Connected to ${x.connection.name}`))

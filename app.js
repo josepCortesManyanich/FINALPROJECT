@@ -30,8 +30,9 @@ app.use(express.urlencoded({ extended: false }));
 // routes intro
 app.use('/', indexRouter);
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/training', trainingRouter);
 app.use(errorHandler);
-app.use('/training', trainingRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
