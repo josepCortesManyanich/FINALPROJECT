@@ -69,3 +69,21 @@ router.put(':id', async(req,res,next) => {
         
     }
 })
+
+router.delete(':id', async(req,res,next) => {
+    const {id} = req.params
+    
+    try {
+        const training = await Training.findById(id);
+        if (!training) {
+          next(new ErrorResponse(`Training not found by id: ${id}`, 404));
+        } else {
+          const deleltedTraining = await Training.findByIdAndDelete(id);
+          res.status(202).json({ data: deletedTraining })
+        }
+    } catch (error) {
+        console.error(error)
+        next(error)
+        
+    }
+})
