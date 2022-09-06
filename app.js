@@ -9,6 +9,7 @@ const errorHandler = require('./middlewares/errorHandler');
 // Routers require
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
+const trainingRouter = require('./routes/training-routes')
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/', indexRouter);
 app.use('/api/v1/auth', authRouter);
 app.use(errorHandler);
+app.use('/training', trainingRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
