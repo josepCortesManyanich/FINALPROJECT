@@ -34,3 +34,38 @@ router.post('/', async(req,res,next) => {
         
     }
 });
+
+router.get(':id', async (req,res,next) => {
+    const {id} = req.params
+    try {
+        const training= await Training.findById(id)
+        if (!training) {
+            next(new ErrorResponse(`An error ocurred while finding ${id} training`, 500));
+          }
+          res.status(200).json({ data: trainings })
+          
+
+    } catch (error) {
+        console.error(error)
+        next(error)        
+    }
+});
+
+router.put(':id', async(req,res,next) => {
+    const{id} = req.params
+    const {name, image, date, category} = req.body
+
+    try {
+        const training = await Training.findById(id);
+        if (!training) {
+          next(new ErrorResponse(`Training not found by id: ${id}`, 404));
+        } else {
+          const updatedTraining = await Training.findByIdAndUpdate(id, {name, image, date, category} , { new: true });
+          res.status(202).json({ data: updatedTraining })
+        }
+    } catch (error) {
+        console.error(error)
+        next(error)
+        
+    }
+})
