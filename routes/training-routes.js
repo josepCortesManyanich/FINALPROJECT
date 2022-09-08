@@ -16,12 +16,14 @@ router.get('/', async(req, res, next) => {
     }
 });
 
+
+// @route   POST /api/v1/training
 router.post('/', async(req,res,next) => {
-    const {name, image, date, category} = req.body
+    const {name, image, date} = req.body
     
     
     try {
-        const newtraining= {name, image, date, category}
+        const newtraining= {name, image, date }
         const training= await Training.create(newtraining)
         if (!training) {
             next(new ErrorResponse('An error ocurred while creating training', 500));
@@ -35,7 +37,7 @@ router.post('/', async(req,res,next) => {
     }
 });
 
-router.get(':id', async (req,res,next) => {
+router.get('/:id', async (req,res,next) => {
     const {id} = req.params
     try {
         const training= await Training.findById(id)
@@ -51,16 +53,16 @@ router.get(':id', async (req,res,next) => {
     }
 });
 
-router.put(':id', async(req,res,next) => {
+router.put('/:id', async(req,res,next) => {
     const{id} = req.params
-    const {name, image, date, category} = req.body
+    const {name, image, date, } = req.body
 
     try {
         const training = await Training.findById(id);
         if (!training) {
           next(new ErrorResponse(`Training not found by id: ${id}`, 404));
         } else {
-          const updatedTraining = await Training.findByIdAndUpdate(id, {name, image, date, category} , { new: true });
+          const updatedTraining = await Training.findByIdAndUpdate(id, {name, image, date, } , { new: true });
           res.status(202).json({ data: updatedTraining })
         }
     } catch (error) {
@@ -70,7 +72,7 @@ router.put(':id', async(req,res,next) => {
     }
 })
 
-router.delete(':id', async(req,res,next) => {
+router.delete('/:id', async(req,res,next) => {
     const {id} = req.params
     
     try {
@@ -87,3 +89,5 @@ router.delete(':id', async(req,res,next) => {
         
     }
 })
+
+module.exports = router;
