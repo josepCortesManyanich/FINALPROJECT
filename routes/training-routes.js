@@ -20,8 +20,6 @@ router.get('/', async(req, res, next) => {
 // @route   POST /api/v1/training
 router.post('/', async(req,res,next) => {
     const {name, image, date, category} = req.body
-    
-    
     try {
         const newtraining= {name, image, date, category}
         const training= await Training.create(newtraining)
@@ -62,7 +60,8 @@ router.put('/:id', async(req,res,next) => {
     try {
         const training = await Training.findById(id);
         if (!training) {
-          next(new ErrorResponse(`Training not found by id: ${id}`, 404));
+            next(new ErrorResponse(`Training not found by id: ${id}`, 404));
+            return;
         } else {
           const updatedTraining = await Training.findByIdAndUpdate(id, {name, image, date, category} , { new: true });
           res.status(202).json({ data: updatedTraining })
@@ -80,7 +79,8 @@ router.delete('/:id', async(req,res,next) => {
     try {
         const training = await Training.findById(id);
         if (!training) {
-          next(new ErrorResponse(`Training not found by id: ${id}`, 404));
+            next(new ErrorResponse(`Training not found by id: ${id}`, 404));
+            return;
         } else {
           const deletedTraining = await Training.findByIdAndDelete(id);
           res.status(202).json({ data: deletedTraining })
@@ -91,5 +91,11 @@ router.delete('/:id', async(req,res,next) => {
         
     }
 })
+
+// PUT editar un training por su /delete/:trainingId, isAuthenticated,
+// Buscar el training, si no encuentra da error
+// training.usersAttending.push(req.payload._id)
+// training.save()
+// devuelvo el training normal
 
 module.exports = router;

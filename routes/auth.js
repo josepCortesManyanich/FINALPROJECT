@@ -97,17 +97,18 @@ router.get('/me', isAuthenticated, (req, res, next) => {
   res.status(200).json(req.payload);
 })
 
-//@route   POST /api/v1/auth/:id
-router.put('/:id', async (req,res,next) => {
-  req.params={id}
-  req.body={email, hashedPassword, username, role}
+//@route   POST /api/v1/auth/edit
+router.put('/edit', isAuthenticated, async (req,res,next) => {
+  // req.payload = user;
+  const { email, username } = req.body;
 
   try {
-    const userInDB= await User.findById(id);
+    const userInDB = await User.findById(req.payload._id);
     if(!userInDB){
       next(new ErrorResponse(`User not found by id: ${id}`, 404));
+      return;
     } else{
-      const updatedUser = await User.findByIdAndUpdate(id, {email, hashedPassword, username, role}, { new: true })
+      const updatedUser = await User.findByIdAndUpdate(req.payload._id, { email, username }, { new: true });
       res.status(202).json({ data: updatedUser })
     }
   } catch (error) {
@@ -116,12 +117,9 @@ router.put('/:id', async (req,res,next) => {
   }
 })
 
-router.delete('/:id', async (req,res,next) => {
-  req.params={id}
-  
-
+router.delete('/delete', isAuthenticated, async (req,res,next) => {
   try {
-    const userInDB= await User.findById(id);
+    const userInDB = await User.findById(req.payload._id);
     if(!userInDB){
       next(new ErrorResponse(`User not found by id: ${id}`, 404));
     } else{

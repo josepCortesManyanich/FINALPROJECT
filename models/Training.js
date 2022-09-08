@@ -16,9 +16,11 @@ const trainingSchema = new Schema({
     category:{
         type: String,
         enum: ['pads','airbike','tabata','sparring']
-
-    }
-        },
+    }, 
+    usersAttending: {
+        type: [{ type: Schema.Types.ObjectId, ref: "User" }],
+     }
+    },
     {
     timestamps: true
     });
