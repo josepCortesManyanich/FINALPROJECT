@@ -99,13 +99,13 @@ router.get('/me', isAuthenticated, (req, res, next) => {
 
 //@route   POST /api/v1/auth/edit
 router.put('/edit', isAuthenticated, async (req,res,next) => {
-  // req.payload = user;
+  const user = req.payload;
   const { email, username } = req.body;
 
   try {
     const userInDB = await User.findById(req.payload._id);
     if(!userInDB){
-      next(new ErrorResponse(`User not found by id: ${id}`, 404));
+      next(new ErrorResponse(`User not found by id: ${req.payload._id}`, 404));
       return;
     } else{
       const updatedUser = await User.findByIdAndUpdate(req.payload._id, { email, username }, { new: true });
@@ -121,9 +121,10 @@ router.delete('/delete', isAuthenticated, async (req,res,next) => {
   try {
     const userInDB = await User.findById(req.payload._id);
     if(!userInDB){
-      next(new ErrorResponse(`User not found by id: ${id}`, 404));
+      next(new ErrorResponse(`User not found by id: ${req.payload._id}`, 404));
+      return;
     } else{
-      const deletedUser = await User.findByIdAndDelete(id)
+      const deletedUser = await User.findByIdAndDelete(req.payload._id)
       res.status(202).json({ data: deletedUser })
     }
   } 
