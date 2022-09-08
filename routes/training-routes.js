@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { isAuthenticated } = require('../middlewares/jwt');
 const Training = require('../models/Training');
+const ErrorResponse = require('../utils/error');
 
 
 // @route   GET /api/v1/training
@@ -57,7 +58,6 @@ router.get('/:id', async (req,res,next) => {
 router.put('/:id', async(req,res,next) => {
     const{id} = req.params
     const {name, image, date, category } = req.body
-
     try {
         const training = await Training.findById(id);
         if (!training) {
@@ -76,7 +76,6 @@ router.put('/:id', async(req,res,next) => {
 
 router.delete('/:id', async(req,res,next) => {
     const {id} = req.params
-    
     try {
         const training = await Training.findById(id);
         if (!training) {
@@ -95,7 +94,6 @@ router.delete('/:id', async(req,res,next) => {
 
 router.put("/edit", isAuthenticated, async (req,res,next) => {
     const user = req.payload
-    
     try {
         const training = await Training.findById(req.payload._id)
         if(!training){
@@ -104,12 +102,34 @@ router.put("/edit", isAuthenticated, async (req,res,next) => {
         }else{
             const newUser = Training.usersAttending.push(req.payload._id)
             training.save()
+            res.status(202).json({ data: newUser })
+            return training
         }
-    } catch (error) {
+    } catch (error) { 
         console.error(error)
         next(error)
     }
 })
+
+router.delete("/delete", isAuthenticated, async(req,res,next) =>{
+    const user = req.payload
+    try {
+        const training = await Training.findById(req.payload._id)
+        if(!training){
+            next(new ErrorResponse(`User  not found by id: ${req.payload._id}`, 404));
+            return;
+        }else{
+            const deletedUser = Training.usersAttending.pull(req.payload._id)
+            training.save()
+            res.status(202).json({ data: deletedUser })
+            return training
+        }
+    } catch (error) { 
+        console.error(error)
+        next(error)
+    }
+})
+
 
 // PUT editar un training por su /delete/:trainingId, isAuthenticated,
 // Buscar el training, si no encuentra da error
