@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { isAuthenticated } = require('../middlewares/jwt');
 const Training = require('../models/Training');
 
 
@@ -89,6 +90,24 @@ router.delete('/:id', async(req,res,next) => {
         console.error(error)
         next(error)
         
+    }
+})
+
+router.put("/edit", isAuthenticated, async (req,res,next) => {
+    const user = req.payload
+    
+    try {
+        const training = await Training.findById(req.payload._id)
+        if(!training){
+            next(new ErrorResponse(`User  not found by id: ${req.payload._id}`, 404));
+            return;
+        }else{
+            const newUser = Training.usersAttending.push(req.payload._id)
+            training.save()
+        }
+    } catch (error) {
+        console.error(error)
+        next(error)
     }
 })
 
