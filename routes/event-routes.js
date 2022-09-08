@@ -4,7 +4,7 @@ const Event = require('../models/Event');
 const ErrorResponse = require('../utils/error');
 
 
-// @route   GET /api/v1/training
+// @route   GET /api/v1/event
 router.get('/', async(req, res, next) => {
     try {
         const event= await Event.find({});
@@ -19,7 +19,7 @@ router.get('/', async(req, res, next) => {
 });
 
 
-// @route   POST /api/v1/training
+// @route   POST /api/v1/event
 router.post('/', async(req,res,next) => {
     const {name, image, date} = req.body
     try {
@@ -35,7 +35,7 @@ router.post('/', async(req,res,next) => {
     }
 });
 
-// @route   GET /api/v1/training/:id
+// @route   GET /api/v1/event/:id
 
 router.get('/:id', async (req,res,next) => {
     const {id} = req.params
@@ -52,6 +52,7 @@ router.get('/:id', async (req,res,next) => {
     }
 });
 
+// @route   PUT /api/v1/event/:id
 router.put('/:id', async(req,res,next) => {
     const{id} = req.params
     const {name, image, date } = req.body
@@ -70,6 +71,7 @@ router.put('/:id', async(req,res,next) => {
     }
 })
 
+// @route   DELETE /api/v1/event/:id
 router.delete('/:id', async(req,res,next) => {
     const {id} = req.params
     try {
@@ -87,6 +89,7 @@ router.delete('/:id', async(req,res,next) => {
     }
 })
 
+// @route   PUT /api/v1/event/edit/:id
 router.put("/edit", isAuthenticated, async (req,res,next) => {
     const user = req.payload
     try {
@@ -106,6 +109,7 @@ router.put("/edit", isAuthenticated, async (req,res,next) => {
     }
 })
 
+// @route   DELETE /api/v1/event/delete/:id
 router.delete("/delete", isAuthenticated, async(req,res,next) =>{
     const user = req.payload
     try {
@@ -124,12 +128,5 @@ router.delete("/delete", isAuthenticated, async(req,res,next) =>{
         next(error)
     }
 })
-
-
-// PUT editar un training por su /delete/:trainingId, isAuthenticated,
-// Buscar el training, si no encuentra da error
-// training.usersAttending.push(req.payload._id)
-// training.save()
-// devuelvo el training normal
 
 module.exports = router;
