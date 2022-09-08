@@ -21,14 +21,13 @@ router.get('/', async(req, res, next) => {
 
 // @route   POST /api/v1/event
 router.post('/', async(req,res,next) => {
-    const {name, image, date} = req.body
     try {
-        const newEvent= {name, image, date}
-        const event= await Event.create(newEvent)
+        const event = await Event.create(req.body);
         if (!event) {
-            next(new ErrorResponse('An error ocurred while creating an event', 500));
-          }
-          res.status(201).json({data: event})
+            return next(new ErrorResponse('An error ocurred while creating an event', 500));
+        } else {
+            res.status(201).json({ data: event })
+         }
     } catch (error) {
         console.error(error)
         next(error)       

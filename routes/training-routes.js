@@ -92,18 +92,17 @@ router.delete('/:id', async(req,res,next) => {
     }
 })
 
-router.put("/edit", isAuthenticated, async (req,res,next) => {
-    const user = req.payload
+router.put("/addUser/:trainingId", isAuthenticated, async (req, res, next) => {
+    const { trainingId } = req.params;
     try {
-        const training = await Training.findById(req.payload._id)
+        const training = await Training.findById(trainingId);
         if(!training){
-            next(new ErrorResponse(`User  not found by id: ${req.payload._id}`, 404));
+            next(new ErrorResponse(`Training not found by id: ${trainingId}`, 404));
             return;
         }else{
-            const newUser = Training.usersAttending.push(req.payload._id)
-            training.save()
-            res.status(202).json({ data: newUser })
-            return training
+            training.usersAttending.push(req.payload._id);
+            training.save();
+            res.status(202).json({ data: training })
         }
     } catch (error) { 
         console.error(error)
@@ -111,12 +110,12 @@ router.put("/edit", isAuthenticated, async (req,res,next) => {
     }
 })
 
-router.delete("/delete", isAuthenticated, async(req,res,next) =>{
+router.delete("/deleteUser/:trainingId", isAuthenticated, async(req,res,next) =>{
     const user = req.payload
     try {
         const training = await Training.findById(req.payload._id)
         if(!training){
-            next(new ErrorResponse(`User  not found by id: ${req.payload._id}`, 404));
+            next(new ErrorResponse(`User not found by id: ${req.payload._id}`, 404));
             return;
         }else{
             const deletedUser = Training.usersAttending.pull(req.payload._id)
