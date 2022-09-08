@@ -4,8 +4,8 @@ const { Schema, model } = mongoose;
 const trainingSchema = new Schema({
     name: {
         type: String,
-        required: true,
-        enum: ['pads','airbike','tabata','sparring']
+        required: true
+        
     },
     image:{
         type:String,
@@ -13,7 +13,11 @@ const trainingSchema = new Schema({
     date:{
         type: String,
     },
-   
+    category:{
+        type: String,
+        enum: ['pads','airbike','tabata','sparring']
+
+    }
         },
     {
     timestamps: true

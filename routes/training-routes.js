@@ -19,11 +19,11 @@ router.get('/', async(req, res, next) => {
 
 // @route   POST /api/v1/training
 router.post('/', async(req,res,next) => {
-    const {name, image, date} = req.body
+    const {name, image, date, category} = req.body
     
     
     try {
-        const newtraining= {name, image, date }
+        const newtraining= {name, image, date, category}
         const training= await Training.create(newtraining)
         if (!training) {
             next(new ErrorResponse('An error ocurred while creating training', 500));
@@ -37,6 +37,8 @@ router.post('/', async(req,res,next) => {
     }
 });
 
+// @route   GET /api/v1/training/:id
+
 router.get('/:id', async (req,res,next) => {
     const {id} = req.params
     try {
@@ -44,7 +46,7 @@ router.get('/:id', async (req,res,next) => {
         if (!training) {
             next(new ErrorResponse(`An error ocurred while finding ${id} training`, 500));
           }
-          res.status(200).json({ data: trainings })
+          res.status(200).json({ data: training })
           
 
     } catch (error) {
@@ -55,14 +57,14 @@ router.get('/:id', async (req,res,next) => {
 
 router.put('/:id', async(req,res,next) => {
     const{id} = req.params
-    const {name, image, date, } = req.body
+    const {name, image, date, category } = req.body
 
     try {
         const training = await Training.findById(id);
         if (!training) {
           next(new ErrorResponse(`Training not found by id: ${id}`, 404));
         } else {
-          const updatedTraining = await Training.findByIdAndUpdate(id, {name, image, date, } , { new: true });
+          const updatedTraining = await Training.findByIdAndUpdate(id, {name, image, date, category} , { new: true });
           res.status(202).json({ data: updatedTraining })
         }
     } catch (error) {
@@ -80,7 +82,7 @@ router.delete('/:id', async(req,res,next) => {
         if (!training) {
           next(new ErrorResponse(`Training not found by id: ${id}`, 404));
         } else {
-          const deleltedTraining = await Training.findByIdAndDelete(id);
+          const deletedTraining = await Training.findByIdAndDelete(id);
           res.status(202).json({ data: deletedTraining })
         }
     } catch (error) {
