@@ -97,4 +97,42 @@ router.get('/me', isAuthenticated, (req, res, next) => {
   res.status(200).json(req.payload);
 })
 
+//@route   POST /api/v1/auth/:id
+router.put('/:id', async (req,res,next) => {
+  req.params={id}
+  req.body={email, hashedPassword, username, role}
+
+  try {
+    const userInDB= await User.findById(id);
+    if(!userInDB){
+      next(new ErrorResponse(`User not found by id: ${id}`, 404));
+    } else{
+      const updatedUser = await User.findByIdAndUpdate(id, {email, hashedPassword, username, role}, { new: true })
+      res.status(202).json({ data: updatedUser })
+    }
+  } catch (error) {
+    console.error(error);
+    next(error)
+  }
+})
+
+router.delete('/:id', async (req,res,next) => {
+  req.params={id}
+  
+
+  try {
+    const userInDB= await User.findById(id);
+    if(!userInDB){
+      next(new ErrorResponse(`User not found by id: ${id}`, 404));
+    } else{
+      const deletedUser = await User.findByIdAndDelete(id)
+      res.status(202).json({ data: deletedUser })
+    }
+  } 
+  catch (error) {
+    console.error(error);
+    next(error)
+  }
+})
+
 module.exports = router;
