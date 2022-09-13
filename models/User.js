@@ -19,7 +19,11 @@ const userSchema = new Schema({
     type: String,
     enum: ['user', 'admin'],
     default: 'user'
-  }
+  },
+  imageUrl:{
+    type: String
+}
+  
 },
   {
     timestamps: true

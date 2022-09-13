@@ -19,7 +19,10 @@ const trainingSchema = new Schema({
     }, 
     usersAttending: {
         type: [{ type: Schema.Types.ObjectId, ref: "User" }],
-     }
+     },
+    imageUrl:{
+        type: String
+    }
     },
     {
     timestamps: true
