@@ -3,10 +3,10 @@ const mongoose = require('mongoose');
 const Event = require('../models/Event');
 
 const events = [
-  {name:"Armados y peligrosos", image:"/images/paos.jpeg",date:"10-10-2022"},
-  {name:"Homenaje Knhay khan Tom", image:"",date:"10-10-2022"},
-  {name:"Interclub Antonio Campoy", image:"",date:"12-10-2022"},
-  {name:"Interclub Sant Andreu", image:"",date:"11-10-2022"}
+  {name:"Armados y peligrosos", imageUrl:"/images/paos.jpeg",date:"10-10-2022"},
+  {name:"Homenaje Knhay khan Tom", imageUrl:"",date:"10-10-2022"},
+  {name:"Interclub Antonio Campoy", imageUrl:"",date:"12-10-2022"},
+  {name:"Interclub Sant Andreu", imageUrl:"",date:"11-10-2022"}
 ]
 
 mongoose.connect(process.env.MONGO_URL)

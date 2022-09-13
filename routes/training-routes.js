@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { isAuthenticated } = require('../middlewares/jwt');
 const Training = require('../models/Training');
 const ErrorResponse = require('../utils/error');
+const fileUploader = require('../config/cloudinary.config');
 
 
 // @route   GET /api/v1/training
