@@ -21,7 +21,7 @@ router.get('/', async(req, res, next) => {
 
 
 // @route   POST /api/v1/training
-router.post('/', async(req,res,next) => {
+router.post('/',  async(req,res,next) => {
     const {name, imageUrl, date, category} = req.body
     try {
         const newtraining= {name, imageUrl, date, category}
@@ -56,7 +56,7 @@ router.get('/:id', async (req,res,next) => {
     }
 });
 
-router.put('/:id', async(req,res,next) => {
+router.put('/:id',isAuthenticated,async(req,res,next) => {
     const{id} = req.params
     const {name, imageUrl, date, category } = req.body
     try {
@@ -75,7 +75,7 @@ router.put('/:id', async(req,res,next) => {
     }
 })
 
-router.delete('/:id', async(req,res,next) => {
+router.delete('/:id',isAuthenticated, async(req,res,next) => {
     const {id} = req.params
     try {
         const training = await Training.findById(id);
@@ -93,7 +93,7 @@ router.delete('/:id', async(req,res,next) => {
     }
 })
 
-router.put("/addUser/:trainingId", isAuthenticated, async (req, res, next) => {
+router.get("/addUser/:trainingId", isAuthenticated, async (req, res, next) => {
     const { trainingId } = req.params;
     try {
         const training = await Training.findById(trainingId);
@@ -111,7 +111,7 @@ router.put("/addUser/:trainingId", isAuthenticated, async (req, res, next) => {
     }
 })
 
-router.delete("/deleteUser/:trainingId", isAuthenticated, async(req,res,next) =>{
+router.get("/deleteUser/:trainingId", isAuthenticated, async(req,res,next) =>{
     const user = req.payload
     try {
         const training = await Training.findById(req.payload._id)
@@ -132,13 +132,13 @@ router.delete("/deleteUser/:trainingId", isAuthenticated, async(req,res,next) =>
 //@desc Add images from Cloudinary
 //@route /api/v1/training/upload
 //@acces PRIVATE
-router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
-    if (!req.file) {
-      next(new ErrorResponse('Error uploading the image', 500));
-      return;
-    }
-    res.json({ fileUrl: req.file.path });
-  });
+//router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
+   // if (!req.file) {
+   //   next(new ErrorResponse('Error uploading the image', 500));
+   //   return;
+   // }
+  //  res.json({ fileUrl: req.file.path });
+ // });
 
 
 // PUT editar un training por su /delete/:trainingId, isAuthenticated,
