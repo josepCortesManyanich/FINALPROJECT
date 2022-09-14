@@ -17,8 +17,15 @@ const isAuthenticated = jwt({
   requestProperty: 'payload',
   getToken: getTokenFromHeaders //token
 });
+const isAdmin = (req, res, next) => {
+  if (req.session.currentUser.role !== 'admin') {
+    return  { error: 'Permissions Denied. Only Admins have access' });
+  }
+  next();
+}
 
 module.exports = {
   isAuthenticated
+  isAdmin
 }
 
