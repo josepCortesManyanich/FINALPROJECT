@@ -64,6 +64,7 @@ router.post('/login', async (req, res, next) => {
       if (passwordMatches) {
         // Let's create what we want to store 
         const payload = {
+          role: userInDB.role,
           email: userInDB.email,
           username: userInDB.username,
           _id: userInDB._id

@@ -1,4 +1,5 @@
 const { expressjwt: jwt } = require('express-jwt');
+const ErrorResponse = require('../utils/error');
 
 // Function used to extract the JWT token from the request's 'Authorization' Headers
 function getTokenFromHeaders(req) {
@@ -17,15 +18,17 @@ const isAuthenticated = jwt({
   requestProperty: 'payload',
   getToken: getTokenFromHeaders //token
 });
+
 const isAdmin = (req, res, next) => {
-  if (req.session.currentUser.role !== 'admin') {
-    return  { error: 'Permissions Denied. Only Admins have access' });
+  if (req.payload.role === 'admin') {
+    next()
+  } else {
+    next(new ErrorResponse('User is not admin'), 401)
   }
-  next();
 }
 
 module.exports = {
-  isAuthenticated
+  isAuthenticated,
   isAdmin
 }
 
