@@ -43,7 +43,7 @@ router.post('/',  async(req,res,next) => {
 router.get('/:id', async (req,res,next) => {
     const {id} = req.params
     try {
-        const training= await Training.findById(id)
+        const training= await Training.findById(id).populate('usersAttending')
         if (!training) {
             return next(new ErrorResponse(`An error ocurred while finding ${id} training`, 500));
           }
@@ -111,18 +111,17 @@ router.get("/addUser/:trainingId", isAuthenticated, async (req, res, next) => {
     }
 })
 
-router.get("/deleteUser/:trainingId", isAuthenticated, async(req,res,next) =>{
-    const user = req.payload
+router.get("/deleteUser/:trainingId", isAuthenticated, async (req, res, next) => {
+    const { trainingId } = req.params;
     try {
-        const training = await Training.findById(req.payload._id)
+        const training = await Training.findById(trainingId)
         if(!training){
-            next(new ErrorResponse(`User not found by id: ${req.payload._id}`, 404));
+            next(new ErrorResponse(`Training not found by id: ${trainingId}`, 404));
             return;
         }else{
-            const deletedUser = Training.usersAttending.pull(req.payload._id)
+            training.usersAttending.pull(req.payload._id);
             training.save()
-            res.status(202).json({ data: deletedUser })
-            return training
+            res.status(202).json({ data: training })
         }
     } catch (error) { 
         console.error(error)
