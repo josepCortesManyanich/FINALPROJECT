@@ -4,6 +4,7 @@ const Event = require('../models/Event');
 const ErrorResponse = require('../utils/error');
 
 
+
 // @route   GET /api/v1/event
 router.get('/', async(req, res, next) => {
     try {
@@ -52,7 +53,7 @@ router.get('/:id', async (req,res,next) => {
 });
 
 // @route   PUT /api/v1/event/:id
-router.put('/:id', async(req,res,next) => {
+router.put('/:id',isAuthenticated, async(req,res,next) => {
     const{id} = req.params
     const {name, image, date } = req.body
     try {
