@@ -112,7 +112,7 @@ router.put("/edit", isAuthenticated, async (req,res,next) => {
 router.get("/addUser/:eventId", isAuthenticated, async (req, res, next) => {
     const { eventId } = req.params;
     try {
-        const event = await Event.findById(trainingId);
+        const event = await Event.findById(eventId);
         if(!event){
             next(new ErrorResponse(`Event not found by id: ${eventId}`, 404));
             return;
