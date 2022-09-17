@@ -131,13 +131,14 @@ router.get("/deleteUser/:trainingId", isAuthenticated, async (req, res, next) =>
 //@desc Add images from Cloudinary
 //@route /api/v1/training/upload
 //@acces PRIVATE
-//router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
-   // if (!req.file) {
-   //   next(new ErrorResponse('Error uploading the image', 500));
-   //   return;
-   // }
-  //  res.json({ fileUrl: req.file.path });
- // });
+router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
+    console.log(req.file)
+   if (!req.file) {
+     next(new ErrorResponse('Error uploading the image', 500));
+     return;
+   }
+   res.json({ fileUrl: req.file.path });
+ });
 
 
 // PUT editar un training por su /delete/:trainingId, isAuthenticated,
