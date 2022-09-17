@@ -108,20 +108,37 @@ router.put("/edit", isAuthenticated, async (req,res,next) => {
         next(error)
     }
 })
-
-// @route   DELETE /api/v1/event/delete/:id
-router.delete("/delete", isAuthenticated, async(req,res,next) =>{
-    const user = req.payload
+//@desc Add users in the event
+router.get("/addUser/:eventId", isAuthenticated, async (req, res, next) => {
+    const { eventId } = req.params;
     try {
-        const event = await Event.findById(req.payload._id)
+        const event = await Event.findById(trainingId);
         if(!event){
-            next(new ErrorResponse(`User  not found by id: ${req.payload._id}`, 404));
+            next(new ErrorResponse(`Event not found by id: ${eventId}`, 404));
             return;
         }else{
-            const deletedUser = Event.usersAttending.pull(req.payload._id)
+            event.usersAttending.push(req.payload._id);
+            event.save();
+            res.status(202).json({ data: event })
+        }
+    } catch (error) { 
+        console.error(error)
+        next(error)
+    }
+})
+
+// @route   DELETE /api/v1/event/delete/:id
+router.get("/deleteUser/:eventId", isAuthenticated, async (req, res, next) => {
+    const { eventId } = req.params;
+    try {
+        const event = await Event.findById(eventId)
+        if(!event){
+            next(new ErrorResponse(`Event not found by id: ${eventId}`, 404));
+            return;
+        }else{
+            event.usersAttending.pull(req.payload._id);
             event.save()
-            res.status(202).json({ data: deletedUser })
-            return event
+            res.status(202).json({ data: event })
         }
     } catch (error) { 
         console.error(error)
