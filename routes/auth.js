@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const { isAuthenticated } = require('../middlewares/jwt');
 const saltRounds = 10;
+const fileUploader = require('../config/cloudinary.config');
 
 // @desc    SIGN UP new user
 // @route   POST /api/v1/auth/signup
@@ -134,5 +135,17 @@ router.delete('/delete', isAuthenticated, async (req,res,next) => {
     next(error)
   }
 })
+
+router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
+  console.log(req.file)
+ if (!req.file) {
+   next(new ErrorResponse('Error uploading the image', 500));
+   return;
+ }
+ res.json({ fileUrl: req.file.path });
+});
+
+
+
 
 module.exports = router;

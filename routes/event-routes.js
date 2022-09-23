@@ -127,7 +127,7 @@ router.get("/addUser/:eventId", isAuthenticated, async (req, res, next) => {
     }
 })
 
-// @route   DELETE /api/v1/event/delete/:id
+// @route   DELETE /api/v1/event/deleteUser/:id
 router.get("/deleteUser/:eventId", isAuthenticated, async (req, res, next) => {
     const { eventId } = req.params;
     try {
