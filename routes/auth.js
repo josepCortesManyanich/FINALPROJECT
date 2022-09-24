@@ -11,7 +11,7 @@ const fileUploader = require('../config/cloudinary.config');
 // @route   POST /api/v1/auth/signup
 // @access  Public
 router.post('/signup', async (req, res, next) => {
-  const { email, password, username } = req.body;
+  const { email, password, username, imageUrl } = req.body;
   // Check if email or password or name are provided as empty string 
   if (email === "" || password === "" || username === "") {
     return next(new ErrorResponse('Please fill all the fields to register', 400))
@@ -33,7 +33,7 @@ router.post('/signup', async (req, res, next) => {
     } else {
       const salt = bcrypt.genSaltSync(saltRounds);
       const hashedPassword = bcrypt.hashSync(password, salt);
-      const user = await User.create({ email, hashedPassword, username });
+      const user = await User.create({ email, hashedPassword, username, imageUrl });
       const publicUser = { // Decide what fields of our user we want to return 
         username: user.username,
         email: user.email,
