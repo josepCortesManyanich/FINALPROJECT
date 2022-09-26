@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { isAuthenticated } = require('../middlewares/jwt');
 const Event = require('../models/Event');
 const ErrorResponse = require('../utils/error');
+const fileUploader = require('../config/cloudinary.config');
 
 
 
@@ -22,8 +23,10 @@ router.get('/', async(req, res, next) => {
 
 // @route   POST /api/v1/event
 router.post('/', async(req,res,next) => {
+    const {name, imageUrl, date, } = req.body
     try {
-        const event = await Event.create(req.body);
+        const newEvent = {name, imageUrl, date, } 
+        const event = await Event.create(newEvent);
         if (!event) {
             return next(new ErrorResponse('An error ocurred while creating an event', 500));
         } else {
@@ -145,5 +148,17 @@ router.get("/deleteUser/:eventId", isAuthenticated, async (req, res, next) => {
         next(error)
     }
 })
+//@desc Add images from Cloudinary
+//@route /api/v1/event/upload
+//@acces PRIVATE
+router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
+    console.log(req.file)
+   if (!req.file) {
+     next(new ErrorResponse('Error uploading the image', 500));
+     return;
+   }
+   res.json({ fileUrl: req.file.path });
+ });
+
 
 module.exports = router;
