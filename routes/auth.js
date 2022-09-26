@@ -135,6 +135,9 @@ router.delete('/delete', isAuthenticated, async (req,res,next) => {
     next(error)
   }
 })
+//@desc Add images from Cloudinary
+//@route /api/v1/auth/signup/upload
+//@acces PRIVATE
 
 router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
   console.log(req.file)
