@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { isAuthenticated } = require('../middlewares/jwt');
 const Event = require('../models/Event');
 const ErrorResponse = require('../utils/error');
+const fileUploader = require('../config/cloudinary.config');
 
 
 
@@ -22,8 +23,10 @@ router.get('/', async(req, res, next) => {
 
 // @route   POST /api/v1/event
 router.post('/', async(req,res,next) => {
+    const {name, imageUrl, date, } = req.body
     try {
-        const event = await Event.create(req.body);
+        const newEvent = {name, imageUrl, date, } 
+        const event = await Event.create(newEvent);
         if (!event) {
             return next(new ErrorResponse('An error ocurred while creating an event', 500));
         } else {
@@ -40,7 +43,7 @@ router.post('/', async(req,res,next) => {
 router.get('/:id', async (req,res,next) => {
     const {id} = req.params
     try {
-        const event = await Event.findById(id)
+        const event = await Event.findById(id).populate('usersAttending');
         if (!event) {
             next(new ErrorResponse(`An error ocurred while finding ${id} event`, 500));
           }
@@ -55,14 +58,14 @@ router.get('/:id', async (req,res,next) => {
 // @route   PUT /api/v1/event/:id
 router.put('/:id',isAuthenticated, async(req,res,next) => {
     const{id} = req.params
-    const {name, image, date } = req.body
+    const {name, imageUrl, date } = req.body
     try {
         const event = await Event.findById(id);
         if (!event) {
             next(new ErrorResponse(`Event not found by id: ${id}`, 404));
             return;
         } else {
-          const updatedEvent = await Event.findByIdAndUpdate(id, {name, image, date} , { new: true });
+          const updatedEvent = await Event.findByIdAndUpdate(id, {name, imageUrl, date} , { new: true });
           res.status(202).json({ data: updatedEvent })
         }
     } catch (error) {
@@ -112,7 +115,7 @@ router.put("/edit", isAuthenticated, async (req,res,next) => {
 router.get("/addUser/:eventId", isAuthenticated, async (req, res, next) => {
     const { eventId } = req.params;
     try {
-        const event = await Event.findById(eventId);
+        const event = await Event.findById(eventId)
         if(!event){
             next(new ErrorResponse(`Event not found by id: ${eventId}`, 404));
             return;
@@ -145,5 +148,17 @@ router.get("/deleteUser/:eventId", isAuthenticated, async (req, res, next) => {
         next(error)
     }
 })
+//@desc Add images from Cloudinary
+//@route /api/v1/event/upload
+//@acces PRIVATE
+router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
+    console.log(req.file)
+   if (!req.file) {
+     next(new ErrorResponse('Error uploading the image', 500));
+     return;
+   }
+   res.json({ fileUrl: req.file.path });
+ });
+
 
 module.exports = router;

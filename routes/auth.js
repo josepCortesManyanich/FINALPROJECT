@@ -33,7 +33,11 @@ router.post('/signup', async (req, res, next) => {
     } else {
       const salt = bcrypt.genSaltSync(saltRounds);
       const hashedPassword = bcrypt.hashSync(password, salt);
+<<<<<<< HEAD
       const user = await User.create({ email, hashedPassword, username, imageUrl });
+=======
+      const user = await User.create({ email, hashedPassword, username, imageUrl});
+>>>>>>> dev
       const publicUser = { // Decide what fields of our user we want to return 
         username: user.username,
         email: user.email,
@@ -135,6 +139,9 @@ router.delete('/delete', isAuthenticated, async (req,res,next) => {
     next(error)
   }
 })
+//@desc Add images from Cloudinary
+//@route /api/v1/auth/signup/upload
+//@acces PRIVATE
 
 router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
   console.log(req.file)
