@@ -11,6 +11,7 @@ const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const trainingRouter = require('./routes/training-routes');
 const eventRouter = require('./routes/event-routes');
+const userRouter = require('./routes/user');
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use('/', indexRouter);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/training', trainingRouter);
 app.use('/api/v1/event', eventRouter);
+app.use('/api/v1/user', userRouter);
 app.use(errorHandler);
 
 

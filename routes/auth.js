@@ -68,6 +68,7 @@ router.post('/login', async (req, res, next) => {
           role: userInDB.role,
           email: userInDB.email,
           username: userInDB.username,
+          imageUrl: userInDB.imageUrl,
           _id: userInDB._id
         }
         // Use the jwt middleware to create de token
@@ -102,7 +103,7 @@ router.get('/me', isAuthenticated, (req, res, next) => {
 //@route   POST /api/v1/auth/edit
 router.put('/edit', isAuthenticated, async (req,res,next) => {
   const user = req.payload;
-  const { email, username } = req.body;
+  const { email, username, imageUrl } = req.body;
 
   try {
     const userInDB = await User.findById(req.payload._id);
@@ -110,7 +111,7 @@ router.put('/edit', isAuthenticated, async (req,res,next) => {
       next(new ErrorResponse(`User not found by id: ${req.payload._id}`, 404));
       return;
     } else{
-      const updatedUser = await User.findByIdAndUpdate(req.payload._id, { email, username }, { new: true });
+      const updatedUser = await User.findByIdAndUpdate(req.payload._id, { email, username, imageUrl }, { new: true });
       res.status(202).json({ data: updatedUser })
     }
   } catch (error) {
