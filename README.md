@@ -40,6 +40,7 @@ Users in the database have the following properties:
   "username": String,
   "email": String,
   "hashedPassword": String
+  "imageUrl: String
 }
 ```
 
@@ -49,16 +50,35 @@ Users in the database have the following properties:
 
 | Action           | Method    | Endpoint             | Req.body                        | Private/Public |
 |------------------|-----------|----------------------|---------------------------------|-----------------|
-| SIGN UP user     | POST      | /api/v1/auth/signup  | { username, email, password }   |    Public |                 
+| SIGN UP user     | POST      | /api/v1/auth/signup  | { username, email, password, imageUrl }   |    Public |                 
 | LOG IN user      | POST      | /api/v1/auth/login   | { email, password }             |    Public |                  
 | GET logged in user   | GET     | /api/v1/auth/me    |   | Private |
 
 ---
 
+| Action           | Method    | Endpoint             | Req.body                        | Private/Public |
+|------------------|-----------|----------------------|---------------------------------|-----------------|
+| GET TRAININGS   | GET     | /api/v1/training |   |    Private |                 
+| CREATE TRAININGS user      | POST      | /api/v1/training/create   | { name, imageUrl, date, category }  |    Private |                  
+| GET ADD USER IN TRAINING   | GET     | /api/v1/training/addUser/:id   |   | Private |
+| GET DELETE USER IN TRAINING  | GET   | /api/v1/training/deleteUser/:id  | |    Private |                 
+| UPDATE TRAINING     | PUT   | /api/v1/training/:id  | { email, password }             |    Private |                  
+| DELETE TRAINING   | DELETE   | /api/v1/training/:id    |   | Private |
+
+
+| Action           | Method    | Endpoint             | Req.body                        | Private/Public |
+|------------------|-----------|----------------------|---------------------------------|-----------------|
+| GET EVENTS   | GET     | /api/v1/training |   |    Private |                 
+| CREATE EVENTS      | POST      | /api/v1/event/create   | { name, imageUrl, date,  }  |    Private |                  
+| GET ADD USER IN AN EVENT   | GET     | /api/v1/event/addUser/:id   |   | Private |
+| GET DELETE USER IN AN EVENT | GET   | /api/v1/event/deleteUser/:id  | |    Private |                 
+| UPDATE EVENT    | PUT   | /api/v1/event/:id  | { email, password }             |    Private |                  
+| DELETE EVENT   | DELETE   | /api/v1/event/:id    |   | Private |
+
 ## Useful links
 
-- [Presentation slides]()
-- [Frontend repository]()
-- [Frontend deploy]()
-- [Deployed REST API]()
+- [https://slides.com/josepcortes/minimal/edit]()
+- [https://github.com/josepCortesManyanich/FINALPROJECTrontend repository]()
+- [https://puro-fighters.netlify.app/]()
+- [https://dashboard.heroku.com/apps/impacto-training/settings]()
 
