@@ -12,7 +12,6 @@ const authRouter = require('./routes/auth');
 const trainingRouter = require('./routes/training-routes');
 const eventRouter = require('./routes/event-routes');
 const userRouter = require('./routes/user');
-const comentRouter = require('./routes/coments-routes');
 
 const app = express();
 
