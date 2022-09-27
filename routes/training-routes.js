@@ -128,6 +128,42 @@ router.get("/deleteUser/:trainingId", isAuthenticated, async (req, res, next) =>
         next(error)
     }
 })
+
+router.get("/addComent/:trainingId", isAuthenticated, async (req, res, next) => {
+    const { trainingId } = req.params;
+    try {
+        const training = await Training.findById(trainingId);
+        if(!training){
+            next(new ErrorResponse(`Training not found by id: ${trainingId}`, 404));
+            return;
+        }else{
+            training.commentsA.push(req.payload._id);
+            training.save();
+            res.status(202).json({ data: training })
+        }
+    } catch (error) { 
+        console.error(error)
+        next(error)
+    }
+})
+
+router.get("/deleteUser/:trainingId", isAuthenticated, async (req, res, next) => {
+    const { trainingId } = req.params;
+    try {
+        const training = await Training.findById(trainingId)
+        if(!training){
+            next(new ErrorResponse(`Training not found by id: ${trainingId}`, 404));
+            return;
+        }else{
+            training.commentsA.pull(req.payload._id);
+            training.save()
+            res.status(202).json({ data: training })
+        }
+    } catch (error) { 
+        console.error(error)
+        next(error)
+    }
+})
 //@desc Add images from Cloudinary
 //@route /api/v1/training/upload
 //@acces PRIVATE
