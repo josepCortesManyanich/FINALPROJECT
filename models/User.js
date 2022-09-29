@@ -22,11 +22,9 @@ const userSchema = new Schema({
   },
   imageUrl:{
     type: String
-}
+  }
   
 },
-  {
-    timestamps: true
-  });
+ 
 
 module.exports = model("User", userSchema);
