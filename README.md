@@ -1,7 +1,7 @@
-# Project's name REST API
+# PURO-FIGHTERS
 ## Description
 
-This is a the backend repository for the React application `app's name`.
+This is a the backend repository for the React application `Puro-fighters`.
 
 ---
 
